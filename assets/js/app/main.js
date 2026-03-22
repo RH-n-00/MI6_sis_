@@ -12,6 +12,36 @@
   const modalResponse = document.getElementById('modalResponse');
   const sections = Array.from(document.querySelectorAll('section[id]'));
 
+  const isMobileLike = () => window.matchMedia('(pointer: coarse)').matches || window.innerWidth <= 900;
+  const isLowPowerDevice = () => isMobileLike() || (typeof navigator.deviceMemory === 'number' && navigator.deviceMemory <= 4);
+
+  const syncResponsiveFlags = () => {
+    document.documentElement.classList.toggle('is-mobile-like', isMobileLike());
+  };
+  syncResponsiveFlags();
+
+  const rafThrottle = (callback) => {
+    let rafId = 0;
+    let latestArgs = null;
+
+    return (...args) => {
+      latestArgs = args;
+      if (rafId) return;
+      rafId = window.requestAnimationFrame(() => {
+        rafId = 0;
+        callback(...latestArgs);
+      });
+    };
+  };
+
+  const debounce = (callback, wait = 120) => {
+    let timeoutId = 0;
+    return () => {
+      window.clearTimeout(timeoutId);
+      timeoutId = window.setTimeout(callback, wait);
+    };
+  };
+
   const setClock = () => {
     if (!topClock) return;
     const now = new Date();
@@ -28,13 +58,19 @@
   window.setInterval(setClock, 1000);
 
   heroButtons.forEach((button) => {
-    button.addEventListener('pointermove', (e) => {
+    const handlePointerMove = rafThrottle((event) => {
       const rect = button.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      const x = ((event.clientX - rect.left) / rect.width) * 100;
+      const y = ((event.clientY - rect.top) / rect.height) * 100;
       button.style.setProperty('--x', `${x}%`);
       button.style.setProperty('--y', `${y}%`);
     });
+
+    button.addEventListener('pointermove', handlePointerMove, { passive: true });
+    button.addEventListener('pointerleave', () => {
+      button.style.setProperty('--x', '50%');
+      button.style.setProperty('--y', '50%');
+    }, { passive: true });
   });
 
   const scrollToTarget = (selector) => {
@@ -81,7 +117,7 @@
         entry.target.classList.add('is-visible');
         revealObserver.unobserve(entry.target);
       });
-    }, { threshold: 0.18 });
+    }, { threshold: 0.16, rootMargin: '0px 0px -8% 0px' });
 
     revealBlocks.forEach((block) => revealObserver.observe(block));
   } else {
@@ -118,7 +154,7 @@
         });
         counterObserver.disconnect();
       });
-    }, { threshold: 0.4 });
+    }, { threshold: 0.35 });
 
     const profileSection = document.getElementById('profile');
     if (profileSection) counterObserver.observe(profileSection);
@@ -138,25 +174,42 @@
     setHeroLight(50, 50, 0);
   };
 
+  const applyHeroInteractivity = (clientX, clientY, pointerType = 'mouse') => {
+    if (!heroStage) return;
+    const rect = heroStage.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+
+    const x = Math.max(0, Math.min(100, ((clientX - rect.left) / rect.width) * 100));
+    const y = Math.max(0, Math.min(100, ((clientY - rect.top) / rect.height) * 100));
+    const px = x / 100 - 0.5;
+    const py = y / 100 - 0.5;
+    const mobile = isMobileLike();
+    const lightAlpha = mobile ? 0.58 : 1;
+    const parallaxFactor = mobile || pointerType === 'touch' ? 0.3 : 1;
+
+    setHeroLight(x, y, lightAlpha);
+
+    if (prefersReducedMotion) return;
+
+    parallaxEls.forEach((el) => {
+      const depth = Number(el.dataset.parallax || 0.8);
+      const tx = px * 22 * depth * parallaxFactor;
+      const ty = py * 14 * depth * parallaxFactor;
+      el.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
+    });
+  };
+
   if (heroStage && !prefersReducedMotion) {
-    heroStage.addEventListener('pointermove', (e) => {
-      const rect = heroStage.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      const px = x / 100 - 0.5;
-      const py = y / 100 - 0.5;
-
-      setHeroLight(x, y, 1);
-
-      parallaxEls.forEach((el) => {
-        const depth = Number(el.dataset.parallax || 0.8);
-        const tx = px * 22 * depth;
-        const ty = py * 14 * depth;
-        el.style.transform = `translate3d(${tx}px, ${ty}px, 0)`;
-      });
+    const handleHeroPointerMove = rafThrottle((event) => {
+      applyHeroInteractivity(event.clientX, event.clientY, event.pointerType || 'mouse');
     });
 
-    heroStage.addEventListener('pointerleave', resetParallax);
+    heroStage.addEventListener('pointermove', handleHeroPointerMove, { passive: true });
+    heroStage.addEventListener('pointerdown', (event) => {
+      applyHeroInteractivity(event.clientX, event.clientY, event.pointerType || 'mouse');
+    }, { passive: true });
+    heroStage.addEventListener('pointerleave', resetParallax, { passive: true });
+    heroStage.addEventListener('pointercancel', resetParallax, { passive: true });
   }
 
   const openModal = (selector) => {
@@ -171,7 +224,7 @@
     if (!accessModal) return;
     accessModal.hidden = true;
     document.body.classList.remove('modal-open');
-    modalResponse.textContent = '';
+    if (modalResponse) modalResponse.textContent = '';
     accessForm?.reset();
   };
 
@@ -190,25 +243,52 @@
   accessForm?.addEventListener('submit', (e) => {
     e.preventDefault();
     const operator = accessForm.operator?.value?.trim() || 'Operator';
-    modalResponse.textContent = 'Authenticating secure tunnel…';
+    if (modalResponse) modalResponse.textContent = 'Authenticating secure tunnel…';
 
     window.setTimeout(() => {
-      modalResponse.textContent = `${operator} verified. Replace this cinematic layer with your real routing, lore gate, or external auth flow.`;
+      if (modalResponse) {
+        modalResponse.textContent = `${operator} verified. Replace this cinematic layer with your real routing, lore gate, or external auth flow.`;
+      }
     }, 900);
   });
 
+  let instancedEffect = null;
+  const syncInstancedQuality = () => {
+    if (!instancedEffect?.rendering?.renderer || !instancedEffect?.rendering?.canvas) return;
+    const canvas = instancedEffect.rendering.canvas;
+    const dprCap = isLowPowerDevice() ? 1 : 1.35;
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, dprCap);
+
+    instancedEffect.rendering.vp.canvas.dpr = pixelRatio;
+    instancedEffect.rendering.renderer.setPixelRatio(pixelRatio);
+    instancedEffect.rendering.renderer.setSize(canvas.offsetWidth, canvas.offsetHeight, false);
+  };
+
   if (window.InstancedMouseEffect) {
-    new InstancedMouseEffect({
-      speed: 0.58,
-      frequency: 0.82,
-      mouseSize: 0.9,
+    const mobile = isMobileLike();
+    instancedEffect = new InstancedMouseEffect({
+      speed: mobile ? 0.5 : 0.58,
+      frequency: mobile ? 0.76 : 0.82,
+      mouseSize: mobile ? 0.76 : 0.9,
       rotationSpeed: 0,
       rotationAmmount: 0,
-      mouseScaling: 0.04,
-      mouseIndent: 0.62,
+      mouseScaling: mobile ? 0.028 : 0.04,
+      mouseIndent: mobile ? 0.54 : 0.62,
       color: '#060708',
       colorDegrade: 1.18,
       shape: 'square'
     });
+    syncInstancedQuality();
   }
+
+  const handleViewportChange = debounce(() => {
+    syncResponsiveFlags();
+    updateActiveNav();
+    syncInstancedQuality();
+    if (prefersReducedMotion) return;
+    resetParallax();
+  }, 140);
+
+  window.addEventListener('resize', handleViewportChange, { passive: true });
+  window.addEventListener('orientationchange', handleViewportChange, { passive: true });
 })();
