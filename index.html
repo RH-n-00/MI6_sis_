@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HALE / SIS INTERNAL NETWORK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="assets/css/main.css" />
+</head>
+<body>
+  <div class="screen-noise" aria-hidden="true"></div>
+  <div class="screen-grid" aria-hidden="true"></div>
+
+  <main class="shell">
+    <header class="topbar">
+      <a class="brand-lockup" href="#overview" aria-label="HALE 홈으로 이동">
+        <span class="brand-mark">SIS</span>
+        <span class="brand-copy">
+          <span class="brand-kicker">Secret Intelligence Service</span>
+          <strong class="brand-name">HALE</strong>
+        </span>
+      </a>
+
+      <nav class="top-nav" aria-label="주요 탐색">
+        <a href="#overview" class="nav-link is-active">Overview</a>
+        <a href="#profile" class="nav-link">Profile</a>
+        <a href="#timeline" class="nav-link">Timeline</a>
+        <a href="#secure" class="nav-link">Access</a>
+      </nav>
+
+      <div class="top-status">
+        <span class="status-pill"><span class="status-dot"></span>Secure Channel</span>
+        <span class="status-divider" aria-hidden="true"></span>
+        <span class="status-clock" id="topClock" aria-live="polite">London 00:00:00</span>
+      </div>
+    </header>
+
+    <section class="hero" id="overview">
+      <div class="hero-runner">
+        <span class="section-chip">Section VII / Restricted Interface</span>
+        <span class="runner-copy">LONDON NODE / ACTIVE DOSSIER / CLEARANCE ALPHA</span>
+      </div>
+
+      <section class="prism-stage" id="heroStage" aria-label="HALE prism hero">
+        <canvas class="prism-canvas" id="canvas" aria-hidden="true"></canvas>
+
+        <div class="hero-overlay">
+          <div class="hero-copy" data-parallax="0.7">
+            <p class="hero-eyebrow">Semper Occultus</p>
+
+            <h1 class="hero-title">
+              <span class="hero-title-shadow" aria-hidden="true">HALE</span>
+              <span class="hero-title-main">HALE</span>
+            </h1>
+
+            <p class="hero-deck">
+              A premium intelligence interface for character profiles, covert dossiers, and story-world reveals — built to feel less like a demo and more like a flagship brand launch.
+            </p>
+
+            <div class="hero-meta">
+              <div class="meta-item">
+                <span>Codename</span>
+                <strong>HALE</strong>
+              </div>
+              <div class="meta-item">
+                <span>Clearance</span>
+                <strong>Alpha // Black</strong>
+              </div>
+              <div class="meta-item">
+                <span>Status</span>
+                <strong>Field Ready</strong>
+              </div>
+            </div>
+
+            <div class="hero-buttons">
+              <button class="glass-button" type="button" data-scroll="#profile">
+                <span class="hero-shimmer"></span>
+                <span class="button-label">PROFILE</span>
+              </button>
+              <button class="glass-button" type="button" data-modal-open="#accessModal">
+                <span class="hero-shimmer"></span>
+                <span class="button-label">SIGN-IN</span>
+              </button>
+            </div>
+          </div>
+
+          <aside class="hero-dossier intel-card" data-parallax="1.1">
+            <p class="card-topline">Operational Summary</p>
+            <div class="dossier-stats">
+              <article>
+                <span>Archive Mode</span>
+                <strong>Profile-led</strong>
+              </article>
+              <article>
+                <span>Presentation</span>
+                <strong>Luxury Dark UI</strong>
+              </article>
+              <article>
+                <span>Deployment</span>
+                <strong>GitHub Pages</strong>
+              </article>
+            </div>
+            <p class="dossier-copy">
+              Tuned for elegance first: restrained motion, dense information hierarchy, and a cinematic black finish suitable for secret-agent or elite-corporate storytelling.
+            </p>
+            <ul class="dossier-list">
+              <li>Premium hero composition with interactive background stage</li>
+              <li>Profile, capabilities, and timeline sections in a single-page flow</li>
+              <li>Static-ready access modal for GitHub Pages deployments</li>
+            </ul>
+          </aside>
+
+          <div class="hero-scanline" aria-hidden="true"></div>
+          <a class="scroll-cue" href="#profile">Scroll dossier</a>
+        </div>
+      </section>
+    </section>
+
+    <section class="section reveal" id="profile">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">Profile</p>
+          <h2 class="section-title">Operative Dossier</h2>
+        </div>
+        <p class="section-copy">
+          Use this area for character biography, affiliation, tone, relationships, and internal narrative material. The layout is structured to feel expensive even before you add final content.
+        </p>
+      </div>
+
+      <div class="profile-layout">
+        <article class="intel-card narrative-card">
+          <p class="card-topline">Subject Overview</p>
+          <h3>Elegant structure for identity, posture, and story hooks.</h3>
+          <p>
+            HALE is presented as an intelligence-grade profile rather than a simple landing block. That shift alone makes the site feel more deliberate, more editorial, and closer to a high-budget corporate or cinematic experience.
+          </p>
+          <div class="tag-row">
+            <span class="tag">Strategic</span>
+            <span class="tag">Covert</span>
+            <span class="tag">Minimal</span>
+            <span class="tag">High Trust</span>
+          </div>
+        </article>
+
+        <article class="intel-card data-card">
+          <p class="card-topline">At a Glance</p>
+          <div class="stat-grid">
+            <div class="stat">
+              <strong data-counter="17">0</strong>
+              <span>Assets linked</span>
+            </div>
+            <div class="stat">
+              <strong data-counter="06">0</strong>
+              <span>Secure nodes</span>
+            </div>
+            <div class="stat">
+              <strong data-counter="24">0</strong>
+              <span>Profile states</span>
+            </div>
+            <div class="stat">
+              <strong data-counter="98">0</strong>
+              <span>Visual fidelity</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="capability-grid">
+        <article class="intel-card capability-card">
+          <p class="card-topline">Identity Layer</p>
+          <h3>Profile-first layout</h3>
+          <p>Built to introduce a character with controlled pacing, premium spacing, and editorial typography rather than generic game-style cards.</p>
+        </article>
+        <article class="intel-card capability-card">
+          <p class="card-topline">Story Layer</p>
+          <h3>Mission and lore blocks</h3>
+          <p>Expandable sections give you space for worldbuilding, dossiers, organization notes, and relationship threads without breaking the visual system.</p>
+        </article>
+        <article class="intel-card capability-card">
+          <p class="card-topline">Presentation Layer</p>
+          <h3>Modern flagship polish</h3>
+          <p>High-contrast chrome, restrained motion, and clear hierarchy make the site feel closer to a luxury product launch than a hobby landing page.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section reveal" id="timeline">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">Timeline</p>
+          <h2 class="section-title">Operational Sequence</h2>
+        </div>
+        <p class="section-copy">
+          A clean story rail for mission beats, personal history, or chapter progression. Each entry is intentionally minimal so it stays stylish even with placeholder content.
+        </p>
+      </div>
+
+      <div class="timeline-grid">
+        <article class="timeline-item intel-card">
+          <span class="timeline-index">01</span>
+          <div>
+            <p class="card-topline">Phase One</p>
+            <h3>Signal acquisition</h3>
+            <p>Introduce the subject, their origin, and the atmosphere around them. This is the first controlled reveal.</p>
+          </div>
+        </article>
+        <article class="timeline-item intel-card">
+          <span class="timeline-index">02</span>
+          <div>
+            <p class="card-topline">Phase Two</p>
+            <h3>Network insertion</h3>
+            <p>Use this block for contacts, organizations, or the first rupture that changes how the audience reads the profile.</p>
+          </div>
+        </article>
+        <article class="timeline-item intel-card">
+          <span class="timeline-index">03</span>
+          <div>
+            <p class="card-topline">Phase Three</p>
+            <h3>Compartment breach</h3>
+            <p>Perfect for a hidden detail, secret objective, or the moment the profile shifts from dossier to myth.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section reveal" id="secure">
+      <div class="cta-panel intel-card">
+        <div class="cta-copy">
+          <p class="section-kicker">Secure Access</p>
+          <h2 class="section-title">Credential-gated presentation, without the bloat.</h2>
+          <p>
+            For GitHub Pages, treat this as a cinematic gateway, a faux sign-in, or a routing layer into profile and story pages. It looks premium now and stays easy to expand later.
+          </p>
+        </div>
+        <div class="cta-actions">
+          <button class="glass-button glass-button--wide" type="button" data-modal-open="#accessModal">
+            <span class="hero-shimmer"></span>
+            <span class="button-label">REQUEST ENTRY</span>
+          </button>
+          <a class="text-link" href="#overview">Return to top</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="accessModal" hidden>
+    <div class="modal-backdrop" data-modal-close></div>
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="accessTitle">
+      <button class="modal-close" type="button" data-modal-close aria-label="닫기">×</button>
+      <p class="section-chip">Secure Gateway</p>
+      <h2 id="accessTitle">Restricted Access</h2>
+      <p class="modal-copy">
+        This is a cinematic placeholder layer for GitHub Pages. Replace it later with route logic, external auth, or a private story entry screen.
+      </p>
+
+      <form class="access-form" id="accessForm">
+        <label>
+          <span>Operator ID</span>
+          <input type="text" name="operator" placeholder="hale.007" autocomplete="off" />
+        </label>
+        <label>
+          <span>Passphrase</span>
+          <input type="password" name="passphrase" placeholder="••••••••••" autocomplete="off" />
+        </label>
+        <button class="glass-button glass-button--wide" type="submit">
+          <span class="hero-shimmer"></span>
+          <span class="button-label">Authenticate</span>
+        </button>
+      </form>
+
+      <div class="modal-response" id="modalResponse" aria-live="polite"></div>
+    </div>
+  </div>
+
+<script src="assets/js/vendor/instanced-mouse-effect.bundle.js"></script>
+<script src="assets/js/app/main.js"></script>
+</body>
+</html>
