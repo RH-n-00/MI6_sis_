@@ -124,17 +124,29 @@
     if (profileSection) counterObserver.observe(profileSection);
   }
 
+  const setHeroLight = (x = 50, y = 50, alpha = 0) => {
+    if (!heroStage) return;
+    heroStage.style.setProperty('--light-x', `${x}%`);
+    heroStage.style.setProperty('--light-y', `${y}%`);
+    heroStage.style.setProperty('--light-alpha', `${alpha}`);
+  };
+
   const resetParallax = () => {
     parallaxEls.forEach((el) => {
       el.style.transform = '';
     });
+    setHeroLight(50, 50, 0);
   };
 
   if (heroStage && !prefersReducedMotion) {
     heroStage.addEventListener('pointermove', (e) => {
       const rect = heroStage.getBoundingClientRect();
-      const px = (e.clientX - rect.left) / rect.width - 0.5;
-      const py = (e.clientY - rect.top) / rect.height - 0.5;
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      const px = x / 100 - 0.5;
+      const py = y / 100 - 0.5;
+
+      setHeroLight(x, y, 1);
 
       parallaxEls.forEach((el) => {
         const depth = Number(el.dataset.parallax || 0.8);
@@ -190,10 +202,10 @@
       speed: 0.58,
       frequency: 0.82,
       mouseSize: 0.9,
-      rotationSpeed: 0.18,
-      rotationAmmount: 0.34,
-      mouseScaling: 0.05,
-      mouseIndent: 0.66,
+      rotationSpeed: 0,
+      rotationAmmount: 0,
+      mouseScaling: 0.04,
+      mouseIndent: 0.62,
       color: '#060708',
       colorDegrade: 1.18,
       shape: 'square'
